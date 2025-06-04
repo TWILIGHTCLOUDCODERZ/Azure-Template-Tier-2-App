@@ -1,0 +1,108 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "West Europe",
+      "metadata": {
+        "description": "Azure region to deploy resources"
+      }
+    },
+    "webAppName": {
+      "type": "string",
+      "defaultValue": "tier2-webapp"
+    },
+    "appServicePlanName": {
+      "type": "string",
+      "defaultValue": "tier2-appserviceplan"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "tier2sqlserverdemo"
+    },
+    "sqlAdminUser": {
+      "type": "string",
+      "defaultValue": "sqladmin"
+    },
+    "sqlAdminPassword": {
+      "type": "securestring"
+    },
+    "sqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "tier2db"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('appServicePlanName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "S1",
+        "tier": "Standard",
+        "capacity": 1
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "[parameters('webAppName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2022-05-01-preview",
+      "name": "[parameters('sqlServerName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "administratorLogin": "[parameters('sqlAdminUser')]",
+        "administratorLoginPassword": "[parameters('sqlAdminPassword')]",
+        "version": "12.0"
+      },
+      "resources": [
+        {
+          "type": "firewallRules",
+          "apiVersion": "2022-05-01-preview",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2022-05-01-preview",
+      "name": "[format('{0}/{1}', parameters('sqlServerName'), parameters('sqlDatabaseName'))]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ],
+      "properties": {
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "maxSizeBytes": "2147483648",
+        "sampleName": "AdventureWorksLT"
+      },
+      "sku": {
+        "name": "Basic",
+        "tier": "Basic"
+      }
+    }
+  ],
+  "outputs": {
+    "webAppUrl": {
+      "type": "string",
+      "value": "[format('https://{0}.azurewebsites.net', parameters('webAppName'))]"
+    }
+  }
+}
