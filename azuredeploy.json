@@ -4,10 +4,7 @@
   "parameters": {
     "location": {
       "type": "string",
-      "defaultValue": "West Europe",
-      "metadata": {
-        "description": "Azure region to deploy resources"
-      }
+      "defaultValue": "West Europe"
     },
     "webAppName": {
       "type": "string",
@@ -31,9 +28,38 @@
     "sqlDatabaseName": {
       "type": "string",
       "defaultValue": "tier2db"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "defaultValue": "tier2-kv"
     }
   },
   "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2023-02-01",
+      "name": "[parameters('keyVaultName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "tenantId": "[subscription().tenantId]",
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "accessPolicies": []
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "2023-02-01",
+      "name": "[format('{0}/SqlAdminPassword', parameters('keyVaultName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+      ],
+      "properties": {
+        "value": "[parameters('sqlAdminPassword')]"
+      }
+    },
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2022-03-01",
@@ -51,6 +77,9 @@
       "apiVersion": "2022-03-01",
       "name": "[parameters('webAppName')]",
       "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
       ],
@@ -59,10 +88,32 @@
       }
     },
     {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[format('{0}/add', parameters('keyVaultName'))]",
+      "apiVersion": "2023-02-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]"
+      ],
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[subscription().tenantId]",
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('webAppName')), '2022-03-01', 'Full').identity.principalId]",
+            "permissions": {
+              "secrets": [ "get", "list" ]
+            }
+          }
+        ]
+      }
+    },
+    {
       "type": "Microsoft.Sql/servers",
       "apiVersion": "2022-05-01-preview",
       "name": "[parameters('sqlServerName')]",
       "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults/secrets', format('{0}/SqlAdminPassword', parameters('keyVaultName')))]"
+      ],
       "properties": {
         "administratorLogin": "[parameters('sqlAdminUser')]",
         "administratorLoginPassword": "[parameters('sqlAdminPassword')]",
@@ -103,6 +154,10 @@
     "webAppUrl": {
       "type": "string",
       "value": "[format('https://{0}.azurewebsites.net', parameters('webAppName'))]"
+    },
+    "keyVaultUri": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))).properties.vaultUri]"
     }
   }
 }
