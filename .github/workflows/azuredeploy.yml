@@ -22,6 +22,6 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ac626fd0-ee3a-43c3-afcb-c1c35de78d5f  # From your JSON
-          resourceGroupName: deepanrey                       # Change as needed
+          resourceGroupName: deepanrey                         # Your resource group
           template: ./azuredeploy.json
-    parameters: 'sqlAdminPassword=${{ secrets.SQL_ADMIN_PASSWORD }}
+          parameters: 'sqlAdminPassword=${{ secrets.SQL_ADMIN_PASSWORD }}'
