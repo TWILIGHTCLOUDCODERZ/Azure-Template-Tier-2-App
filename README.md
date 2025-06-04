@@ -72,5 +72,4 @@ Launch the **AI Architect Assistant** below to get tailored guidance for your cl
 
 ---
 
-## 📁 Project Structure
 
