@@ -1,0 +1,10 @@
+- uses: azure/login@v1
+  with:
+    creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+- uses: azure/arm-deploy@v1
+  with:
+    subscriptionId: <your-subscription-id>
+    resourceGroupName: <your-resource-group>
+    template: ./azuredeploy.json
+    parameters: sqlAdminPassword=<password>
