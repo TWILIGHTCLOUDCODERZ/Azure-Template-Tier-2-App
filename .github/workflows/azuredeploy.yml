@@ -1,10 +1,27 @@
-- uses: azure/login@v1
-  with:
-    creds: ${{ secrets.AZURE_CREDENTIALS }}
+name: Deploy Azure ARM Template
 
-- uses: azure/arm-deploy@v1
-  with:
-    subscriptionId: <your-subscription-id>
-    resourceGroupName: <your-resource-group>
-    template: ./azuredeploy.json
-    parameters: sqlAdminPassword=<password>
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Login to Azure using Service Principal
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy ARM template
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ac626fd0-ee3a-43c3-afcb-c1c35de78d5f  # From your JSON
+          resourceGroupName: deepanrey                       # Change as needed
+          template: ./azuredeploy.json
+          parameters: sqlAdminPassword
