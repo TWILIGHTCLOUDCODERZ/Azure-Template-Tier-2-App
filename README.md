@@ -1,63 +1,76 @@
 # 🚀 Azure Tier-2 App Deployment
 
-This repository contains an ARM template that provisions a **Tier-2 Azure application**, including:
+Provision a full **Tier-2 Azure Application Architecture** in minutes using this automated deployment template.
 
-- 🌐 Azure App Service (Web App)
-- 🗄️ Azure SQL Database
-- 🔐 Azure Key Vault for secure secret management
+> ✅ Deploys an App Service + SQL Database + Key Vault with secure configuration and managed identity.
 
 ---
 
-## 📦 What's Deployed
+## 📦 What’s Included
 
 | Resource               | Purpose                                              |
 |------------------------|------------------------------------------------------|
-| **App Service Plan**   | Hosting infrastructure for the Web App              |
-| **Web App**            | Application runtime with system-assigned identity   |
-| **SQL Server & DB**    | Backend relational data storage                     |
-| **Key Vault**          | Stores SQL admin password securely                  |
-| **Access Policies**    | Grants Web App identity access to Key Vault secrets |
+| **App Service Plan**   | Hosts the Web App workload                          |
+| **Web App**            | Publicly accessible application with managed identity |
+| **SQL Server & DB**    | Backend data layer                                  |
+| **Key Vault**          | Securely stores SQL admin password                  |
+| **Access Policies**    | Enables the Web App to retrieve secrets securely    |
 
 ---
 
-## 🧰 Parameters Used
+## 🧰 Parameters
 
 | Parameter             | Description                              |
 |------------------------|------------------------------------------|
-| `webAppName`          | Name for the Web App                     |
-| `appServicePlanName`  | Hosting plan for the Web App             |
+| `webAppName`          | Name of the Web App                      |
+| `appServicePlanName`  | Name of the App Service Plan             |
 | `sqlServerName`       | Logical SQL Server name                  |
-| `sqlAdminUser`        | SQL Server administrator login           |
-| `sqlAdminPassword`    | SQL Server administrator password (secret) |
-| `sqlDatabaseName`     | SQL Database name                        |
-| `keyVaultName`        | Key Vault to store SQL credentials       |
-| `location`            | Azure region for deployment              |
+| `sqlAdminUser`        | SQL administrator username               |
+| `sqlAdminPassword`    | SQL administrator password (secured)     |
+| `sqlDatabaseName`     | Name of the SQL database                 |
+| `keyVaultName`        | Key Vault resource name                  |
+| `location`            | Azure region (default: West Europe)     |
 
 ---
 
-## ✅ Deploy Now
+## 🚀 Deploy This Architecture to Azure
 
-Click the button below to deploy the Tier-2 Web + SQL App into your Azure environment via the Azure Portal:
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FTWILIGHTCLOUDCODERZ%2FAzure-Template-Tier-2-App%2Fmain%2Fazuredeploy.json)
-
-> 📝 Make sure to provide secure values (like the SQL admin password) during deployment.
-
----
-
-## 🔒 Security
-
-- Secrets like the SQL admin password are stored securely in **Azure Key Vault**
-- Web App is granted access to fetch secrets via **Managed Identity**
+<div align="center">
+  <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FTWILIGHTCLOUDCODERZ%2FAzure-Template-Tier-2-App%2Fmain%2Fazuredeploy.json" target="_blank">
+    <img src="https://img.shields.io/badge/Deploy%20to%20Azure-Click%20Here-blue?style=for-the-badge&logo=microsoftazure" alt="Deploy to Azure"/>
+  </a>
+</div>
 
 ---
 
-## 📤 Outputs After Deployment
+## 🤖 Need Help Designing Your Architecture?
 
-- `webAppUrl`: Access URL of the deployed Web App
-- `keyVaultUri`: URI to your deployed Key Vault
+Launch the **AI Architect Assistant** below to get tailored guidance for your cloud architecture needs:
+
+<div align="center">
+  <a href="https://twilightcloudcoderz.github.io/AI-ARCHITECT-ASSISTANT/" target="_blank">
+    <img src="https://img.shields.io/badge/Launch%20AI%20Architect%20Assistant-Open%20Tool-green?style=for-the-badge&logo=githubpages" alt="Launch AI Assistant"/>
+  </a>
+</div>
 
 ---
 
-## 📁 Folder Structure
+## 🔒 Security Highlights
+
+- 🔐 SQL Admin credentials are stored in **Azure Key Vault**
+- 🆔 Web App is assigned a **System-Assigned Managed Identity** for secure access
+- 🔑 Key Vault access policy is configured dynamically for the Web App identity
+
+---
+
+## 📤 Outputs
+
+| Output Key    | Description                          |
+|---------------|--------------------------------------|
+| `webAppUrl`   | URL of the deployed Web App          |
+| `keyVaultUri` | URI of the deployed Key Vault        |
+
+---
+
+## 📁 Project Structure
 
