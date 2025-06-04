@@ -24,4 +24,4 @@ jobs:
           subscriptionId: ac626fd0-ee3a-43c3-afcb-c1c35de78d5f  # From your JSON
           resourceGroupName: deepanrey                       # Change as needed
           template: ./azuredeploy.json
-          parameters: sqlAdminPassword
+    parameters: 'sqlAdminPassword=${{ secrets.SQL_ADMIN_PASSWORD }}'
