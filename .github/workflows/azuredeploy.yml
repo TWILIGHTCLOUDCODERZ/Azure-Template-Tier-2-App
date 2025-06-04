@@ -23,4 +23,3 @@ jobs:
           az deployment group create \
             --resource-group deepanrey \
             --template-file azuredeploy.json \
-            --parameters sqlAdminPassword='${{ secrets.SQL_ADMIN_PASSWORD }}'
