@@ -1,0 +1,13 @@
+
+Generate an ARM template to deploy a Tier-2 web application in Azure. It should include:
+
+An App Service Plan and a Web App with system-assigned identity.
+
+A SQL Server and SQL Database.
+
+An Azure Key Vault that stores the SQL admin password as a secret.
+
+Grant the Web App access to Key Vault secrets.
+
+Add outputs for the Web App URL and Key Vault URI.
+Use parameters for names, location, and credentials. Make sure resources are linked with proper dependencies.
