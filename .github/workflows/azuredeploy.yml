@@ -13,15 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Login to Azure using Service Principal
+      - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy ARM template
-        uses: azure/arm-deploy@v1
-        with:
-          subscriptionId: ac626fd0-ee3a-43c3-afcb-c1c35de78d5f  # From your JSON
-          resourceGroupName: deepanrey                         # Your resource group
-          template: ./azuredeploy.json
-          parameters: 'sqlAdminPassword=${{ secrets.SQL_ADMIN_PASSWORD }}'
+      - name: Deploy ARM template using Azure CLI
+        run: |
+          az deployment group create \
+            --resource-group deepanrey \
+            --template-file azuredeploy.json \
+            --parameters sqlAdminPassword='${{ secrets.SQL_ADMIN_PASSWORD }}'
