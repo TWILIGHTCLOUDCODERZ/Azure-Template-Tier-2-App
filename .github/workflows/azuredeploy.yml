@@ -18,7 +18,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy ARM template using Azure CLI
+      - name: Deploy using Azure CLI
         run: |
           az deployment group create \
             --resource-group deepanrey \
