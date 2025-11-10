@@ -6,7 +6,7 @@ Provision a full **Tier-2 Azure Application Architecture** in minutes using this
 
 ---
 
-## 📦 What’s Included
+## 📦 What’s Included:
 
 | Resource               | Purpose                                              |
 |------------------------|------------------------------------------------------|
